@@ -12,7 +12,7 @@ export class AdvertisementsService {
     
     async getAll(count, offset) {
         const amount = await this.advertisementModel.count();
-        const res = await this.advertisementModel.find().skip(Number(offset)).limit(Number(count));
+        const res = await this.advertisementModel.find().skip(Number(offset * count)).limit(Number(count));
         return { items: res, amount};
     }
 
