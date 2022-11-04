@@ -18,6 +18,8 @@ export class RatingService {
 
         if(!isSetRating){
             await this.ratingModel.create({...dto});
+
+
         }
 
         if(isSetRating){
@@ -37,7 +39,7 @@ export class RatingService {
             count: count
         }
 
-       await this.advertisementModel.findOneAndUpdate(
+       const advertisement = await this.advertisementModel.findOneAndUpdate(
             {
                 _id: dto.advertisement
             },
@@ -45,6 +47,11 @@ export class RatingService {
                 rating: rating
             })
 
-            throw new HttpException('Ви залишили оцінку', HttpStatus.OK);
+            const response = {
+                data: advertisement,
+                message: isSetRating ? "Ви змінили оцінку" : "Оцінка збережена"
+            }
+
+            return response;
     }
 }
