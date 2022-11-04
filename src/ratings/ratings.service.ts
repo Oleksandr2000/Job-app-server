@@ -14,22 +14,25 @@ export class RatingService {
 
     async setRating (dto: CreateRatingDto) {
 
-       
-        await this.ratingModel.create({...dto});
+        const isSetRating = await this.ratingModel.findOne({advertisement: dto.advertisement, user: dto.user});
+
+        if(!isSetRating){
+            await this.ratingModel.create({...dto});
 
 
+        }
 
-        // if(isSetRating){
-        //    await this.ratingModel.findOneAndUpdate(
-        //     {advertisement: dto.advertisement, user: dto.user},
-        //     {value: dto.value});
-        // }
+        if(isSetRating){
+           await this.ratingModel.findOneAndUpdate(
+            {advertisement: dto.advertisement, user: dto.user},
+            {value: dto.value});
+        }
 
         const count = await this.ratingModel.count({advertisement: dto.advertisement});
 
-        const courseRating = await this.ratingModel.find({advertisement: dto.advertisement});
+        const arrayRating = await this.ratingModel.find({advertisement: dto.advertisement});
 
-        const currentRating = courseRating.map(item => item.value).reduce((sum, item) => sum + item, 0) / count; 
+        const currentRating = arrayRating.map(item => item.value).reduce((sum, item) => sum + item, 0) / count; 
 
         const rating = {
             value: currentRating,
@@ -46,7 +49,7 @@ export class RatingService {
 
             const response = {
                 data: advertisement,
-                message: "Оцінка збережена"
+                message: isSetRating ? "Ви змінили оцінку" : "Оцінка збережена"
             }
 
             return response;
