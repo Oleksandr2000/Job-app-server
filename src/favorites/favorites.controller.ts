@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { addToFavoriteDto } from './add-favorited.dto';
 import { FavoriteService } from './favorites.service';
 
@@ -11,8 +11,10 @@ export class FavoriteController {
         return this.favoriteService.toglleFavorite(ratingDto)
     }
 
-    @Get(':id')
-    getAllFavorite(@Param('id') id: any){
-        return this.favoriteService.getFavorite(id);
+    @Get()
+    getAllFavorite( @Query('id') id: any,
+                    @Query('count') count: number,
+                    @Query('offset') offset: number){
+        return this.favoriteService.getFavorite(id, count, offset);
     }
 }

@@ -25,13 +25,14 @@ export class FavoriteService {
         return favorite;
     }
 
-    async getFavorite (id){
+    async getFavorite (id: any, count: number, offset: number){
+        const amount = await this.favoriteModel.count({user: id});
         const favoriteId = await this.favoriteModel.find({user: id});
 
         const favoritesIdArray = favoriteId.map(item => item.advertisement);
 
-        const favorites = await this.advertisementModel.find({_id: favoritesIdArray});
+        const favorites = await this.advertisementModel.find({_id: favoritesIdArray}).skip(Number(offset * count)).limit(Number(count));;
 
-        return favorites;
+        return { items: favorites, amount};
     }
 }
