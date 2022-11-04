@@ -14,19 +14,16 @@ export class RatingService {
 
     async setRating (dto: CreateRatingDto) {
 
-        const isSetRating = await this.ratingModel.findOne({advertisement: dto.advertisement, user: dto.user});
-
-        if(!isSetRating){
-            await this.ratingModel.create({...dto});
+       
+        await this.ratingModel.create({...dto});
 
 
-        }
 
-        if(isSetRating){
-           await this.ratingModel.findOneAndUpdate(
-            {advertisement: dto.advertisement, user: dto.user},
-            {value: dto.value});
-        }
+        // if(isSetRating){
+        //    await this.ratingModel.findOneAndUpdate(
+        //     {advertisement: dto.advertisement, user: dto.user},
+        //     {value: dto.value});
+        // }
 
         const count = await this.ratingModel.count({advertisement: dto.advertisement});
 
@@ -49,7 +46,7 @@ export class RatingService {
 
             const response = {
                 data: advertisement,
-                message: isSetRating ? "Ви змінили оцінку" : "Оцінка збережена"
+                message: "Оцінка збережена"
             }
 
             return response;
