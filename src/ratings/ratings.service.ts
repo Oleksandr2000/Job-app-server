@@ -32,10 +32,12 @@ export class RatingService {
 
         const arrayRating = await this.ratingModel.find({advertisement: dto.advertisement});
 
-        const currentRating = arrayRating.map(item => item.value).reduce((sum, item) => sum + item, 0) / count; 
+        const currentRating = arrayRating.map(item =>  item.value).reduce((sum, item) => sum + item, 0); 
+
+        console.log(currentRating);
 
         const rating = {
-            value: currentRating,
+            value: currentRating  / count,
             count: count
         }
 
@@ -45,13 +47,17 @@ export class RatingService {
             },
             {
                 rating: rating
-            })
-
-            const response = {
-                data: advertisement,
-                message: isSetRating ? "Ви змінили оцінку" : "Оцінка збережена"
+            },
+            {
+                new: true
             }
+        )
 
-            return response;
+        const response = {
+            data: advertisement,
+            message: isSetRating ? "Ви змінили оцінку" : "Оцінка збережена"
+        }
+
+        return response;
     }
 }
